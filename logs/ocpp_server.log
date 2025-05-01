@@ -1,0 +1,6 @@
+2025-04-29 09:51:21 - ocpp - INFO - Server Started listening to new connections...
+[2025-04-29 11:11:46] [ocpp] [INFO] [Server Started listening to new connections...]
+[2025-04-29 11:15:37] [websockets.server] [INFO] [server listening on 0.0.0.0:9000]
+[2025-04-29 11:15:37] [ocpp] [INFO] [Server Started listening to new connections...]
+[2025-04-29 11:16:08] [websockets.server] [INFO] [server listening on 0.0.0.0:9000]
+[2025-04-29 11:16:08] [ocpp] [INFO] [Server Started listening to new connections...]

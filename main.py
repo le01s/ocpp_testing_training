@@ -8,7 +8,7 @@ from ocpp.v16 import call_result
 from ocpp.v16.enums import Action, RegistrationStatus
 import websockets
 
-logging.basicConfig(level=logging.INFO)
+from log import logger
 
 
 class ChargePoint(cp):
@@ -27,7 +27,8 @@ class ChargePoint(cp):
 
 
 async def on_connect(websocket):
-    """For every new charge point that connects, create a ChargePoint
+    """
+    For every new charge point that connects, create a ChargePoint
     instance and start listening for messages.
     """
     try:
@@ -35,31 +36,25 @@ async def on_connect(websocket):
             "Sec-WebSocket-Protocol"
         ]
     except KeyError:
-        logging.error(
-            "Client hasn't requested any Subprotocol. "
-            "Closing Connection"
+        logger.error(
+            "Client hasn't requested any Subprotocol. Closing Connection"
         )
         return await websocket.close()
     if websocket.subprotocol:
-        logging.info(
-            f"Protocols Matched: "
-            f"{websocket.subprotocol}"
-        )
+        logger.info(f"Protocols Matched: {websocket.subprotocol}")
     else:
         # In the websockets lib if no subprotocols are supported by the
         # client and the server, it proceeds without a subprotocol,
         # so we have to manually close the connection.
-        logging.warning(
+        logger.warning(
             f"Protocols Mismatched | Expected Subprotocols: "
             f"{websocket.available_subprotocols},"
             f" but client supports  {requested_protocols} | "
             f"Closing connection"
         )
         return await websocket.close()
-
     charge_point_id = websocket.request.path.strip("/")
     cp = ChargePoint(charge_point_id, websocket)
-
     await cp.start()
 
 
@@ -69,10 +64,7 @@ async def main():
         9000,
         subprotocols=["ocpp1.6"]
     )
-
-    logging.info(
-        "Server Started listening to new connections..."
-    )
+    logger.info("Server Started listening to new connections...")
     await server.wait_closed()
 
 
